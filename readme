@@ -9,9 +9,6 @@ The application is deployed on Amazon EC2 instances running in **private subnets
 The entire AWS infrastructure is provisioned and managed using **Terraform Infrastructure as Code (IaC)**.
 
 
-
-
-
 ---
 
 ## 🏗️ Architecture
@@ -45,9 +42,10 @@ The entire AWS infrastructure is provisioned and managed using **Terraform Infra
                             ▼
                        Internet
 ```
-
-
-
+![vpc-image](vpc.png)
+![alb-image](alb.png) 
+![igw-image](igw.png) 
+![subnet-image](subnets.png)
 ---
 
 ## 🚀 Application
@@ -58,12 +56,7 @@ The template is automatically downloaded and configured during EC2 instance init
 
 The web application is served using **Nginx** and accessed through the Application Load Balancer DNS endpoint.
 
-
-
-
-
-
-
+![website-image](website.png)
 ---
 
 ## 🛠️ Technologies Used
