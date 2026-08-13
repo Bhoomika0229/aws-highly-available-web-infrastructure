@@ -1,12 +1,5 @@
 # AWS Highly Available Web Application Infrastructure
 
-![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
-![Terraform](https://img.shields.io/badge/Terraform-Infrastructure%20as%20Code-623CE4)
-![EC2](https://img.shields.io/badge/AWS-EC2-blue)
-![ALB](https://img.shields.io/badge/AWS-Application%20Load%20Balancer-blue)
-![Auto Scaling](https://img.shields.io/badge/AWS-Auto%20Scaling-orange)
-![Nginx](https://img.shields.io/badge/Web%20Server-Nginx-green)
-
 ## 📌 Project Overview
 
 This project demonstrates the design and deployment of a **highly available static web application infrastructure on AWS using Terraform**.
