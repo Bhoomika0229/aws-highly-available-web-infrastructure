@@ -1,0 +1,609 @@
+# AWS Highly Available Web Application Infrastructure
+
+## 📌 Project Overview
+
+This project demonstrates the design and deployment of a **highly available static web application infrastructure on AWS using Terraform**.
+
+The application is deployed on Amazon EC2 instances running in **private subnets across multiple Availability Zones**. An **Application Load Balancer (ALB)** distributes incoming HTTP traffic across the EC2 instances, while an **Auto Scaling Group (ASG)** maintains application availability and automatically replaces unhealthy instances.
+
+The entire AWS infrastructure is provisioned and managed using **Terraform Infrastructure as Code (IaC)**.
+
+---
+
+## 🏗️ Architecture
+
+```text
+                         INTERNET
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Application Load    │
+                 │ Balancer (ALB)      │
+                 │      Port 80        │
+                 └──────────┬──────────┘
+                            │
+              ┌─────────────┴─────────────┐
+              │                           │
+              ▼                           ▼
+      ┌────────────────┐         ┌────────────────┐
+      │ Private Subnet │         │ Private Subnet │
+      │     AZ-1       │         │     AZ-2       │
+      │                │         │                │
+      │  EC2 + Nginx   │         │  EC2 + Nginx   │
+      │  Web Server    │         │  Web Server    │
+      └───────┬────────┘         └────────┬───────┘
+              │                           │
+              ▼                           ▼
+        NAT Gateway                NAT Gateway
+              │                           │
+              └─────────────┬─────────────┘
+                            │
+                            ▼
+                       Internet
+```
+
+---
+
+## 🚀 Application
+
+A static web template from **Tooplate – Orbital** is deployed on the EC2 instances.
+
+The template is automatically downloaded and configured during EC2 instance initialization using Terraform `user_data`.
+
+The web application is served using **Nginx** and accessed through the Application Load Balancer DNS endpoint.
+
+---
+
+## 🛠️ Technologies Used
+
+### Cloud
+
+* Amazon Web Services (AWS)
+* Amazon EC2
+* Amazon VPC
+* Application Load Balancer
+* Auto Scaling Group
+* NAT Gateway
+* Internet Gateway
+* Elastic IP
+* IAM
+* AWS Systems Manager
+
+### Infrastructure as Code
+
+* Terraform
+
+### Networking
+
+* VPC
+* Public Subnets
+* Private Subnets
+* Route Tables
+* Security Groups
+* Availability Zones
+
+### Web Server
+
+* Nginx
+* HTML
+* CSS
+* JavaScript
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+## ✨ Key Features
+
+* Highly available multi-AZ architecture
+* Public and private subnet separation
+* Internet-facing Application Load Balancer
+* EC2 instances deployed in private subnets
+* Auto Scaling Group with minimum, desired, and maximum capacity
+* CPU-based Auto Scaling policy
+* ALB health checks
+* Automatic replacement of unhealthy instances
+* NAT Gateway for private subnet internet access
+* Security Group based traffic control
+* Automated Nginx installation
+* Automated static website deployment
+* Infrastructure fully provisioned using Terraform
+* AWS Systems Manager access without requiring an EC2 key pair
+
+---
+
+## 📁 Project Structure
+
+```text
+aws-highly-available-web-infrastructure/
+│
+├── .gitignore
+├── README.md
+│
+├── screenshots/
+│   ├── architecture.png
+│   ├── vpc.png
+│   ├── subnets.png
+│   ├── alb.png
+│   ├── target-group.png
+│   ├── autoscaling.png
+│   └── website.png
+│
+└── terraform/
+    │
+    ├── provider.tf
+    ├── variables.tf
+    ├── terraform.tfvars
+    ├── vpc.tf
+    ├── subnet.tf
+    ├── internet-gateway.tf
+    ├── nat-gateway.tf
+    ├── route-table.tf
+    ├── security-groups.tf
+    ├── iam.tf
+    ├── alb.tf
+    ├── launch-template.tf
+    ├── autoscaling.tf
+    ├── outputs.tf
+    └── .terraform.lock.hcl
+```
+
+---
+
+## 🔧 Infrastructure Components
+
+### 1. VPC
+
+A custom VPC is created with the CIDR:
+
+```text
+10.0.0.0/16
+```
+
+---
+
+### 2. Public Subnets
+
+Two public subnets are created across different Availability Zones.
+
+```text
+Public Subnet AZ-1 → 10.0.1.0/24
+Public Subnet AZ-2 → 10.0.2.0/24
+```
+
+The Application Load Balancer is deployed in these public subnets.
+
+---
+
+### 3. Private Subnets
+
+Two private subnets are created across different Availability Zones.
+
+```text
+Private Subnet AZ-1 → 10.0.3.0/24
+Private Subnet AZ-2 → 10.0.4.0/24
+```
+
+The EC2 web servers are deployed in these private subnets.
+
+---
+
+### 4. Internet Gateway
+
+The Internet Gateway provides internet connectivity to resources in the public subnets.
+
+```text
+Public Subnet
+      ↓
+Internet Gateway
+      ↓
+Internet
+```
+
+---
+
+### 5. NAT Gateway
+
+NAT Gateways allow EC2 instances in private subnets to access the internet for outbound communication.
+
+```text
+Private EC2
+     ↓
+Private Route Table
+     ↓
+NAT Gateway
+     ↓
+Internet Gateway
+     ↓
+Internet
+```
+
+This allows the EC2 instances to download packages and the web template without exposing them directly to the internet.
+
+---
+
+### 6. Application Load Balancer
+
+The Application Load Balancer is deployed across the two public subnets.
+
+It:
+
+* Accepts HTTP traffic on port 80
+* Performs health checks
+* Routes requests to healthy EC2 instances
+* Distributes traffic across Availability Zones
+
+---
+
+### 7. Auto Scaling Group
+
+The Auto Scaling Group maintains the desired number of web servers.
+
+Configuration:
+
+```text
+Minimum Instances: 2
+Desired Instances: 2
+Maximum Instances: 4
+```
+
+The ASG uses the EC2 Launch Template to create new instances.
+
+---
+
+### 8. Auto Scaling Policy
+
+A target tracking policy is configured based on average CPU utilization.
+
+```text
+Target CPU Utilization: 60%
+```
+
+When the workload increases, the Auto Scaling Group can launch additional instances.
+
+---
+
+### 9. Security Groups
+
+Two security groups are used.
+
+#### ALB Security Group
+
+Allows:
+
+```text
+HTTP - Port 80
+Source: 0.0.0.0/0
+```
+
+#### EC2 Security Group
+
+Allows:
+
+```text
+HTTP - Port 80
+Source: ALB Security Group
+```
+
+The EC2 instances are therefore not directly exposed to internet traffic.
+
+---
+
+## 🔐 Security Design
+
+The architecture follows a basic layered security model:
+
+```text
+Internet
+   ↓
+ALB Security Group
+   ↓
+Application Load Balancer
+   ↓
+EC2 Security Group
+   ↓
+Private EC2 Instances
+```
+
+The web servers are placed in private subnets and receive traffic only through the Application Load Balancer.
+
+---
+
+## ⚙️ EC2 Initialization
+
+The EC2 Launch Template uses `user_data` to automatically:
+
+1. Update the operating system
+2. Install Nginx
+3. Install required download utilities
+4. Download the Tooplate Orbital template
+5. Extract the template
+6. Copy the website files to the Nginx document root
+7. Configure file permissions
+8. Restart Nginx
+
+This eliminates the need for manual application configuration after EC2 instances are launched.
+
+---
+
+## 🚀 Deployment
+
+### Prerequisites
+
+Install:
+
+* Terraform
+* AWS CLI
+* Git
+
+Verify:
+
+```bash
+terraform --version
+aws --version
+git --version
+```
+
+---
+
+## 🔑 Configure AWS Credentials
+
+Configure AWS CLI:
+
+```bash
+aws configure
+```
+
+Verify authentication:
+
+```bash
+aws sts get-caller-identity
+```
+
+Do not store AWS credentials inside the Terraform files or GitHub repository.
+
+---
+
+## 🏗️ Initialize Terraform
+
+Navigate to the Terraform directory:
+
+```bash
+cd terraform
+```
+
+Initialize Terraform:
+
+```bash
+terraform init
+```
+
+---
+
+## 🔍 Validate Configuration
+
+```bash
+terraform fmt
+terraform validate
+```
+
+---
+
+## 📋 Review Infrastructure
+
+```bash
+terraform plan
+```
+
+Review the resources Terraform plans to create.
+
+---
+
+## 🚀 Create Infrastructure
+
+```bash
+terraform apply
+```
+
+Enter:
+
+```text
+yes
+```
+
+Terraform will provision the AWS infrastructure.
+
+---
+
+## 🌐 Access the Application
+
+After deployment, retrieve the Application Load Balancer DNS name:
+
+```bash
+terraform output alb_dns_name
+```
+
+Open the returned DNS name in a web browser:
+
+```text
+http://<ALB-DNS-NAME>
+```
+
+The Tooplate Orbital static website should be displayed.
+
+---
+
+## 📊 Testing
+
+### Load Balancing
+
+The application is deployed on multiple EC2 instances.
+
+Refreshing the application demonstrates that requests can be served by different instances through the Application Load Balancer.
+
+---
+
+### Health Checks
+
+The ALB continuously checks the health of the EC2 targets.
+
+If an instance becomes unhealthy, traffic is directed to healthy instances.
+
+---
+
+### Auto Scaling
+
+The Auto Scaling Group can scale the number of EC2 instances based on CPU utilization.
+
+```text
+CPU increases
+      ↓
+Auto Scaling
+      ↓
+Additional EC2 instance
+      ↓
+Instance registered with ALB
+```
+
+---
+
+### High Availability
+
+The web servers are deployed across multiple Availability Zones.
+
+If an instance or Availability Zone experiences a failure, the remaining healthy infrastructure can continue serving the application.
+
+---
+
+## 🔧 Troubleshooting
+
+### Check Nginx
+
+```bash
+sudo systemctl status nginx
+```
+
+Restart Nginx:
+
+```bash
+sudo systemctl restart nginx
+```
+
+---
+
+### Check Website Files
+
+```bash
+ls -la /usr/share/nginx/html/
+```
+
+---
+
+### Check EC2 Initialization Logs
+
+```bash
+sudo tail -100 /var/log/cloud-init-output.log
+```
+
+---
+
+### Check ALB Target Health
+
+AWS Console:
+
+```text
+EC2
+→ Load Balancing
+→ Target Groups
+→ Targets
+```
+
+Targets should show:
+
+```text
+healthy
+```
+
+---
+
+## 🧹 Destroy Infrastructure
+
+When the project is no longer required, destroy the resources to avoid unnecessary AWS charges:
+
+```bash
+terraform destroy
+```
+
+Enter:
+
+```text
+yes
+```
+
+---
+
+## 📸 Screenshots
+
+The repository contains screenshots demonstrating:
+
+* AWS VPC
+* Public and private subnets
+* Route tables
+* NAT Gateway
+* Application Load Balancer
+* Target Group
+* Auto Scaling Group
+* Running EC2 instances
+* Deployed web application
+
+---
+
+## 🎯 Learning Outcomes
+
+Through this project, I gained hands-on experience with:
+
+* AWS VPC architecture
+* Public and private subnet design
+* AWS networking
+* Internet Gateway and NAT Gateway
+* Route tables
+* Security Groups
+* EC2 deployment
+* Application Load Balancer
+* Auto Scaling Groups
+* Health checks
+* IAM roles
+* AWS Systems Manager
+* Nginx configuration
+* Terraform Infrastructure as Code
+* Git and GitHub
+* Automated application deployment
+
+---
+
+## 👩‍💻 Author
+
+**Bhoomika K R**
+
+Computer Science Engineering Graduate
+Cloud & DevOps Enthusiast
+
+---
+
+## ⭐ Project Highlights
+
+```text
+✓ Multi-AZ AWS Architecture
+✓ Private EC2 Web Servers
+✓ Application Load Balancer
+✓ Auto Scaling
+✓ NAT Gateway
+✓ Security Groups
+✓ Nginx
+✓ Terraform IaC
+✓ Automated Deployment
+✓ AWS Systems Manager
+```

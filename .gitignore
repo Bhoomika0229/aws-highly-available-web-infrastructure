@@ -1,0 +1,139 @@
+# ================================
+# Terraform
+# ================================
+
+# Terraform working directory
+.terraform/
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform variable files
+# Uncomment if terraform.tfvars contains secrets
+# *.tfvars
+# *.tfvars.json
+
+# Terraform sensitive variable files
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Keep Terraform dependency lock file
+# .terraform.lock.hcl SHOULD be committed
+
+
+# ================================
+# Secrets / Credentials
+# ================================
+
+# Environment variables
+.env
+.env.*
+*.env
+
+# AWS credentials
+.aws/
+credentials
+config
+
+# Private keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# SSH keys
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+
+# ================================
+# Logs
+# ================================
+
+*.log
+logs/
+
+
+# ================================
+# OS Files
+# ================================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+
+# ================================
+# IDE / Editors
+# ================================
+
+# VS Code
+.vscode/
+
+# IntelliJ / JetBrains
+.idea/
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+
+# ================================
+# Temporary Files
+# ================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+
+# ================================
+# Downloaded Template Files
+# ================================
+
+# Don't accidentally commit downloaded ZIP files
+*.zip
+
+
+# ================================
+# Python (if you later add Flask)
+# ================================
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
+
+
+# ================================
+# Node.js (if template contains build files)
+# ================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
