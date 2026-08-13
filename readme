@@ -52,6 +52,8 @@ The template is automatically downloaded and configured during EC2 instance init
 
 The web application is served using **Nginx** and accessed through the Application Load Balancer DNS endpoint.
 
+[website-image](website.png) 
+
 ---
 
 ## 🛠️ Technologies Used
