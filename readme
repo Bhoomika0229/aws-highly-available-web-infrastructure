@@ -7,11 +7,6 @@ This project demonstrates the design and deployment of a **highly available stat
 The application is deployed on Amazon EC2 instances running in **private subnets across multiple Availability Zones**. An **Application Load Balancer (ALB)** distributes incoming HTTP traffic across the EC2 instances, while an **Auto Scaling Group (ASG)** maintains application availability and automatically replaces unhealthy instances.
 
 The entire AWS infrastructure is provisioned and managed using **Terraform Infrastructure as Code (IaC)**.
-
-
-
-
-
 ---
 
 ## 🏗️ Architecture
@@ -46,10 +41,6 @@ The entire AWS infrastructure is provisioned and managed using **Terraform Infra
                        Internet
 ```
 
-
-
----
-
 ## 🚀 Application
 
 A static web template from **Tooplate – Orbital** is deployed on the EC2 instances.
@@ -57,13 +48,6 @@ A static web template from **Tooplate – Orbital** is deployed on the EC2 insta
 The template is automatically downloaded and configured during EC2 instance initialization using Terraform `user_data`.
 
 The web application is served using **Nginx** and accessed through the Application Load Balancer DNS endpoint.
-
-
-
-
-
-
-
 ---
 
 ## 🛠️ Technologies Used
