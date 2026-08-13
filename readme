@@ -1,4 +1,4 @@
-# AWS Highly Available Web Application Infrastructure
+﻿# AWS Highly Available Web Application Infrastructure
 
 ## 📌 Project Overview
 
@@ -7,6 +7,10 @@ This project demonstrates the design and deployment of a **highly available stat
 The application is deployed on Amazon EC2 instances running in **private subnets across multiple Availability Zones**. An **Application Load Balancer (ALB)** distributes incoming HTTP traffic across the EC2 instances, while an **Auto Scaling Group (ASG)** maintains application availability and automatically replaces unhealthy instances.
 
 The entire AWS infrastructure is provisioned and managed using **Terraform Infrastructure as Code (IaC)**.
+
+
+
+
 
 ---
 
@@ -42,6 +46,8 @@ The entire AWS infrastructure is provisioned and managed using **Terraform Infra
                        Internet
 ```
 
+
+
 ---
 
 ## 🚀 Application
@@ -52,7 +58,11 @@ The template is automatically downloaded and configured during EC2 instance init
 
 The web application is served using **Nginx** and accessed through the Application Load Balancer DNS endpoint.
 
-[website-image](website.png) 
+
+
+
+
+
 
 ---
 
